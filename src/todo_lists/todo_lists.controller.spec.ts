@@ -2,15 +2,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { before } from 'node:test';
 import { TodoListsController } from './todo_lists.controller';
 import { TodoListsService } from './todo_lists.service';
+import { ItemsService } from '../items/items.service';
 
 describe('TodoListsController', () => {
   let todoListService: TodoListsService;
   let todoListsController: TodoListsController;
 
   beforeEach(async () => {
-    todoListService = new TodoListsService([
-      { id: 1, name: 'test1' },
-      { id: 2, name: 'test2' },
+    todoListService = new TodoListsService(new ItemsService(), [
+      { id: 1, name: 'test1', items:[] },
+      { id: 2, name: 'test2', items:[] },
     ]);
 
     const app: TestingModule = await Test.createTestingModule({
@@ -24,8 +25,8 @@ describe('TodoListsController', () => {
   describe('index', () => {
     it('should return the list of todolist', () => {
       expect(todoListsController.index()).toEqual([
-        { id: 1, name: 'test1' },
-        { id: 2, name: 'test2' },
+        { id: 1, name: 'test1', items:[] },
+        { id: 2, name: 'test2', items:[] },
       ]);
     });
   });
@@ -35,6 +36,7 @@ describe('TodoListsController', () => {
       expect(todoListsController.show({ todoListId: 1 })).toEqual({
         id: 1,
         name: 'test1',
+        items:[],
       });
     });
   });
@@ -43,7 +45,7 @@ describe('TodoListsController', () => {
     it('should update the todolist with the given id', () => {
       expect(
         todoListsController.update({ todoListId: 1 }, { name: 'modified' }),
-      ).toEqual({ id: 1, name: 'modified' });
+      ).toEqual({ id: 1, name: 'modified', items:[] });
 
       expect(todoListService.get(1).name).toEqual('modified');
     });
@@ -54,6 +56,7 @@ describe('TodoListsController', () => {
       expect(todoListsController.create({ name: 'new' })).toEqual({
         id: 3,
         name: 'new',
+        items:[]
       });
 
       expect(todoListService.all().length).toBe(3);

@@ -1,0 +1,14 @@
+Requerimientos:
+-Item:
+Atributos: Descripci'on, id, id de todolist, fecha de creaci'on (opcional), completado
+
+- path: /api/todolist
+
+			/idTodoList/items *→ get, debe traer todos los items de la todolist especificada en el path
+				→ post, en el body debe estar el item que se quiera agregar a la todolist
+			
+				/idItem *→ get, debe devoler el item especificado
+					*→ put, en el body debe estar el item con informaci'on que se quiera modificar
+					/complete → get, debe marcar como completado el item y devolver toda la informaci'on del item
+					→ delete, elimina el item de la todolist
+				
